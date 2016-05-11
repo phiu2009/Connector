@@ -1,0 +1,1 @@
+insert into connector_sync (serial, version) values (1, 1.1);
