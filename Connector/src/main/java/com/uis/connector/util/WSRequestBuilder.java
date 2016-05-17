@@ -63,10 +63,12 @@ public class WSRequestBuilder {
 									 part.setSupplierId(appState.getPLSupplierId());
 									 part.setWheresoldDelete(0);
 									 PartListingSupp partSupp = new PartListingSupp(inv, appState.getPLSupplierId());
-									 PartListingComment partComment = new PartListingComment(appState.getPLSupplierId(), inv.getSerial(), inv.getComment());
 									 request.getUpdates().addData(part);
 									 request.getUpdates().addData(partSupp);
-									 request.getUpdates().addData(partComment);
+									 if (inv.getComment() != null && !"".equals(inv.getComment())){
+										 PartListingComment partComment = new PartListingComment(appState.getPLSupplierId(), inv.getSerial(), inv.getComment());
+										 request.getUpdates().addData(partComment);
+									 }
 									});
 		newParts.forEach(inv -> {PartListing part = new PartListing(inv);
 								 part.setSupplierId(appState.getPLSupplierId());
@@ -91,10 +93,12 @@ public class WSRequestBuilder {
 									 stock.setWheredeleteSold(0);
 									 stock.setSupplierId(appState.getPLSupplierId());
 									 StockListingSupp stockSupp = new StockListingSupp(st, appState.getPLSupplierId());
-									 StockListingComment stockComment = new StockListingComment(appState.getPLSupplierId(), st.getSerial(), st.getNotes());
 									 request.getUpdates().addData(stock);
 									 request.getUpdates().addData(stockSupp);
-									 request.getUpdates().addData(stockComment);
+									 if (st.getNotes() != null && !"".equals(st.getNotes())){
+										 StockListingComment stockComment = new StockListingComment(appState.getPLSupplierId(), st.getSerial(), st.getNotes());
+										 request.getUpdates().addData(stockComment);
+									 }
 									});
 		newStocks.forEach(st -> { StockListing stock = new StockListing(st);
 		 						 stock.setSupplierId(appState.getPLSupplierId());
