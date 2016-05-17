@@ -203,18 +203,6 @@ public class StockListing {
 		return stockNo;
 	}
 
-	public void setStockNo(String stockNo) {
-		this.stockNo = stockNo;
-	}
-
-	public Integer getWheredeleteSold() {
-		return wheredeleteSold;
-	}
-
-	public void setWheredeleteSold(Integer wheredeleteSold) {
-		this.wheredeleteSold = wheredeleteSold;
-	}
-
 	public int getWriteOff() {
 		return writeOff;
 	}
@@ -230,5 +218,17 @@ public class StockListing {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
+	public Integer getWheredeleteSold() {
+		return wheredeleteSold;
+	}
+
+	public void setWheredeleteSold(Integer wheredeleteSold) {
+		this.wheredeleteSold = wheredeleteSold;
+	}
+
+	public void setStockNo(String stockNo) {
+		this.stockNo = stockNo;
+	}
+
 }

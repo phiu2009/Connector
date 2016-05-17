@@ -40,12 +40,14 @@ public class ImageWSClient extends AbstractWSClient {
 	@Autowired 
 	private InventoryImageRepository inventoryImagesRepository;
 	
+	private boolean forcedResync = false;
 	
 	public void addInventoryImages(long partListingId){
 		for (int i=1; i<=4; i++){
 			List<InventoryImages> imageList = inventoryImagesRepository.findByInventorySerialAndImageNo(partListingId, i);
 			processImages(imageList, partListingId, 0, i, true);
 		}
+		forcedResync = false;
 	}
 	
 	public void updateInventoryImages(long partListingId){
@@ -64,6 +66,7 @@ public class ImageWSClient extends AbstractWSClient {
 			List<InventoryImages> imageList = inventoryImagesRepository.findByStockSerialAndImageNo(stockId, i);
 			processImages(imageList, 0, stockId, i, true);
 		}
+		forcedResync = false;
 	}
 	
 	public void updateStockImages(long stockId){
@@ -90,7 +93,7 @@ public class ImageWSClient extends AbstractWSClient {
 			if (partListingId > 0){ // build partListing image
 				PartListingImagePojo partImage = new PartListingImagePojo(appState.getPLSupplierId(), imgNo, 
 						partListingId, stockListing, imageData.toString());
-				if (wsSync == 0){
+				if (wsSync == 0 || forcedResync){
 					request.getAdds().addData(partImage);
 					logger.info("Add image " + imgNo + " for partListing serial: " + partListingId);
 				}else{
@@ -100,7 +103,7 @@ public class ImageWSClient extends AbstractWSClient {
 			}else if (stockListingId > 0){ // build stockListing image
 				StockListingImagePojo stockImage = new StockListingImagePojo(appState.getPLSupplierId(), imgNo, 
 						stockListingId, imageData.toString());
-				if (wsSync == 0){
+				if (wsSync == 0 || forcedResync){
 					request.getAdds().addData(stockImage);
 					logger.info("Add image " + imgNo + " for stockListing serial: " + stockListingId);
 				}else{
@@ -150,120 +153,18 @@ public class ImageWSClient extends AbstractWSClient {
 		
 		
 	}
-	/*private void processImages(List<InventoryImages> imageList, long partListingId, long stockListingId, boolean add){
-		StringBuffer imageData = new StringBuffer();
-		int imgNo = 1;
-		int wsSync = 0;
-		Set<Integer> existingImageNo = new HashSet<Integer>();
-		for (int i=0; i<imageList.size(); i++) {
-			InventoryImages img = imageList.get(i);
-			if ((imgNo != img.getImageNo() || i == imageList.size()-1)){
-				if (i == imageList.size()-1){
-					imageData.append(img.getData());
-					imgNo=img.getImageNo(); 
-				}
-				
-				if (imageData.length() > 0){
-					WSRequest request = reqBuilder.initWSRequest();
-					if (partListingId > 0){ // build partListing image
-						PartListingImagePojo partImage = new PartListingImagePojo(appState.getPLSupplierId(), imgNo, 
-								partListingId, stockListingId, imageData.toString());
-						if (wsSync == 0){
-							request.getAdds().addData(partImage);
-							logger.info("Add image " + imgNo + " for partListing serial: " + partListingId);
-						}else{
-							request.getUpdates().addData(partImage);
-							logger.info("Update image " + imgNo + " for partListing serial: " + partListingId);
-						}
-					}else if (stockListingId > 0){ // build stockListing image
-						StockListingImagePojo stockImage = new StockListingImagePojo(appState.getPLSupplierId(), imgNo, 
-								stockListingId, imageData.toString());
-						if (wsSync == 0){
-							request.getAdds().addData(stockImage);
-							logger.info("Add image " + imgNo + " for stockListing serial: " + stockListingId);
-						}else{
-							request.getUpdates().addData(stockImage);
-							logger.info("Update image " + imgNo + " for stockListing serial: " + stockListingId);
-						}
-					}
-					WSResponse response = sendWSRequest(request);
-					if (response != null){
-						if (partListingId > 0){
-							inventoryImagesRepository.updateWSSyncStatusByInvSerial(new Long(partListingId), imgNo);
-						}else if (stockListingId > 0){
-							
-						}
-					}
-					existingImageNo.add(imgNo);
-					imageData = new StringBuffer();
-				}
-				imgNo=img.getImageNo(); 
-				wsSync = img.getWsSync();
-			}
-			imageData.append(img.getData());
-		}
-		
-		if (!add){
-			WSRequestDelete requestDelete = reqBuilder.initWSDeleteRequest();
-			String deletedImages = "";
-			// check for deleted images
-			for (int i=1; i<=TOTAL_IMAGES_NO; i++) {
-				if (!existingImageNo.contains(i)){
-					if (partListingId > 0){ // build partListing image
-						PartImageCriteria partImageCriteria = new PartImageCriteria(
-								appState.getPLSupplierId(), partListingId, i);
-						requestDelete.getDeletes().addData(partImageCriteria);
-						logger.info("Send delete request for image:" + deletedImages + " - partListing:" + partListingId);
-					}else if (stockListingId > 0){
-						StockListingImageCriteria stockImageCriteria = new StockListingImageCriteria(
-								appState.getPLSupplierId(), stockListingId, i);
-						requestDelete.getDeletes().addData(stockImageCriteria);
-						logger.info("Send delete request for image:" + deletedImages + " - stockListing:" + stockListingId);
-					}
-					deletedImages+=i+",";
-				}
-			}
-			
-			if ((requestDelete.getDeletes().getDeletePartImages() != null && requestDelete.getDeletes().getDeletePartImages().size()>0) ||
-					(requestDelete.getDeletes().getDeleteStockListingImages() != null && requestDelete.getDeletes().getDeleteStockListingImages().size() > 0)){
-				sendWSRequest(requestDelete);
-			}
-		}
-	}*/
-	
-	public WSResponseGet getPartImage(String lastCheckTime){
-		WSRequestGetPartImage requestGetPartImage = new WSRequestGetPartImage();
-		PartImageCriteria partImageCriteria = new PartImageCriteria();
-		partImageCriteria.setModifiedDateTime(lastCheckTime);
-		requestGetPartImage.getGetPartImages().add(partImageCriteria);
-		
-		WSRequestGet getPartImageRequest = reqBuilder.initWSRequestGet(requestGetPartImage);
-		WSResponseGet responseObj = sendWSGetRequest(getPartImageRequest);
-		return responseObj;
-	}
 	
 	public WSResponseGet getPartImageByPartListingId(String stockLising, String partListingId, String imageId){
 		WSRequestGetPartImage requestGetPartImage = new WSRequestGetPartImage();
 		PartImageCriteria partImageCriteria = new PartImageCriteria();
 		partImageCriteria.setSupplierId(String.valueOf(appState.getPLSupplierId()));
 		partImageCriteria.setPartListingId(partListingId);
-		partImageCriteria.setSupplierId(stockLising);
+		partImageCriteria.setStockListingId(stockLising);
 		partImageCriteria.setImageId(imageId);
 		requestGetPartImage.getGetPartImages().add(partImageCriteria);
 		
 		WSRequestGet getPartImageRequest = reqBuilder.initWSRequestGet(requestGetPartImage);
 		WSResponseGet responseObj = sendWSGetRequest(getPartImageRequest);
-		return responseObj;
-	}
-	
-	public WSResponseGet getStockImage(String lastCheckTime){
-		WSRequestGetStockImage requestGetStockImage = new WSRequestGetStockImage();
-		StockImageCriteria stockImageCriteria = new StockImageCriteria();
-		stockImageCriteria.setModifiedDateTime(lastCheckTime);
-		requestGetStockImage.getGetStockListingImages().add(stockImageCriteria);
-		
-		WSRequestGet getStockImageRequest = reqBuilder.initWSRequestGet(requestGetStockImage);
-		WSResponseGet responseObj = sendWSGetRequest(getStockImageRequest);
 		return responseObj;
 	}
 	
@@ -279,4 +180,14 @@ public class ImageWSClient extends AbstractWSClient {
 		WSResponseGet responseObj = sendWSGetRequest(getStockImageRequest);
 		return responseObj;
 	}
+
+	public boolean isForcedResync() {
+		return forcedResync;
+	}
+
+	public void setForcedResync(boolean forcedResync) {
+		this.forcedResync = forcedResync;
+	}
+	
+	
 }

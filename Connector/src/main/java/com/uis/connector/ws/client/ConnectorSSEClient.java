@@ -18,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.uis.connector.ApplicationState;
+import com.uis.connector.AutoUpdater;
+import com.uis.connector.entity.ConnectorSync;
 import com.uis.connector.repository.InventoryRepository;
+import com.uis.connector.repository.SyncRepository;
 import com.uis.connector.task.ForcedResyncTask;
 import com.uis.connector.task.InventoryImageWSCheckTask;
 import com.uis.connector.task.StockImageWSCheckTask;
@@ -40,6 +43,10 @@ public class ConnectorSSEClient {
 	private StockImageWSCheckTask stockImageWSCheckTask;
 	@Autowired
 	private ForcedResyncTask forcedResyncTask;
+	@Autowired
+	private AutoUpdater autoUpdater;
+	@Autowired
+	private SyncRepository syncRepository;
 	
 	@PostConstruct
 	public void init(){
@@ -96,6 +103,13 @@ public class ConnectorSSEClient {
 					}
 				}else if ("forceResync".equals(msgObj.get("eventType"))){
 					forcedResyncTask.resync();
+				}else if ("forceUpdate".equals(msgObj.get("eventType"))){
+					double currentVersion = 0.0;
+					ConnectorSync syncState = syncRepository.findOne(new Integer(1));
+					if (syncState.getVersion() != null){
+						currentVersion = syncState.getVersion().doubleValue();
+					}
+					autoUpdater.checkForUpdate(currentVersion);
 				}
 			}
 		}catch(JSONException je){

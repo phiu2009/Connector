@@ -34,7 +34,7 @@ public class InventoryWSClient extends AbstractWSClient{
 	
 	private boolean forcedResync = false;
 	
-	public void addPartListing(List<Inventory> partListings){
+	public WSResponse addPartListing(List<Inventory> partListings){
         WSRequest request = reqBuilder.initWSRequest();
         if (forcedResync){
         	reqBuilder.buildWSRequestResync(partListings);
@@ -50,6 +50,7 @@ public class InventoryWSClient extends AbstractWSClient{
         	partListingSerials.add(partListing.getSerial());
         	// Add images
         	if (!partListing.isSynced() || forcedResync){
+        		inventoryImageWSClient.setForcedResync(forcedResync);
         		inventoryImageWSClient.addInventoryImages(partListing.getSerial());
         	}else{
         		inventoryImageWSClient.updateInventoryImages(partListing.getSerial());
@@ -60,6 +61,8 @@ public class InventoryWSClient extends AbstractWSClient{
         	logger.info("Update parts wsSync status: " + partListingSerials.toString());
         	inventoryRepository.updateWSSyncStatus(partListingSerials);
         }
+        
+        return responseObj;
 	}
 
 	public WSResponseGet getPartListing(long supplierId, String lastCheckTime){

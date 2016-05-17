@@ -4,8 +4,8 @@ public class PartImageCriteria extends AbstractCriteria{
 
 	private String supplierId;
 	private String partListingId;
+	private String stockListingId;
 	private String imageId;
-	private String modifiedDateTime;
 	
 	public PartImageCriteria() {
 	}
@@ -35,11 +35,13 @@ public class PartImageCriteria extends AbstractCriteria{
 		this.imageId = formatCriteriaWithoutQuote("=", imageId);
 	}
 
-	public String getModifiedDateTime() {
-		return modifiedDateTime;
+	public String getStockListingId() {
+		return stockListingId;
 	}
-	public void setModifiedDateTime(String modifiedDateTime) {
-		this.modifiedDateTime = formatCriteria(">=", modifiedDateTime);
+
+	public void setStockListingId(String stockListingId) {
+		this.stockListingId = formatCriteriaWithoutQuote("=",stockListingId);
 	}
+
 	
 }

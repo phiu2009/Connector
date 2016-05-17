@@ -10,7 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.uis.connector.entity.ConnectorSync;
@@ -70,7 +69,7 @@ public class ApplicationState {
 		autoUpdater.checkForUpdate(currentVersion);
 		
 		// Send suppliers info
-		supplierWSClient.addSupplierInfo(setting);
+		supplierWSClient.addSupplierInfo(setting, syncState.getVersion());
 		
 		// Init locations 
 		Iterable<Locations> locationIterator = locationRepository.findAll();
@@ -87,10 +86,14 @@ public class ApplicationState {
 	}
 	
 	public long getPLSupplierId(){
+		Long supplierId = Long.parseLong(plSupplierId);
+		if (supplierId != null && supplierId.longValue() > 0){
+			return supplierId;
+		}
 		if (setting != null && setting.getPlSupplierId() > 0){
 			return setting.getPlSupplierId();
 		}
-		return Long.parseLong(plSupplierId);
+		return 0;
 	}
 	
 	public LocalDateTime getLastInventorySync() {

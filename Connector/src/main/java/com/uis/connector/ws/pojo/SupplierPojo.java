@@ -1,5 +1,7 @@
 package com.uis.connector.ws.pojo;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uis.connector.entity.DataShareSetting;
 import com.uis.connector.entity.Settings;
@@ -27,6 +29,8 @@ public class SupplierPojo {
 	private Integer datashareRetail;
 	private Integer datashareLimit;
 	private Integer forceResync;
+	private String uisVersion;
+	private BigDecimal connectorVersion;
 	
 	public SupplierPojo() {
 	}
@@ -186,6 +190,21 @@ public class SupplierPojo {
 	public void setForceResync(Integer forceResync) {
 		this.forceResync = forceResync;
 	}
-	
+
+	public String getUisVersion() {
+		return uisVersion;
+	}
+
+	public void setUisVersion(String uisVersion) {
+		this.uisVersion = uisVersion;
+	}
+
+	public BigDecimal getConnectorVersion() {
+		return connectorVersion;
+	}
+
+	public void setConnectorVersion(BigDecimal connectorVersion) {
+		this.connectorVersion = connectorVersion;
+	}
 	
 }

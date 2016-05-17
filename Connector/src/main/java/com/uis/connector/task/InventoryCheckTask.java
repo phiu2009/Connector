@@ -14,6 +14,7 @@ import com.uis.connector.entity.Inventory;
 import com.uis.connector.repository.InventoryRepository;
 import com.uis.connector.repository.SyncRepository;
 import com.uis.connector.ws.client.InventoryWSClient;
+import com.uis.connector.ws.pojo.WSResponse;
 
 @Component
 public class InventoryCheckTask {
@@ -45,23 +46,32 @@ public class InventoryCheckTask {
 		
 		if (partList != null){
 			if (partList.size() > 0 && partList.size() < MAX_LISTING_PER_REQUEST){
-				inventoryWSClient.addPartListing(partList);
+				WSResponse response = inventoryWSClient.addPartListing(partList);
+				if (response != null){
+					lastCheck = LocalDateTime.now();
+					syncRepository.updateLastInventoryCheck();
+				}
 			}else{
+				boolean success = true;
 				while (partList.size() > 0){
+					WSResponse response = null;
 					if (partList.size() > MAX_LISTING_PER_REQUEST){
-						inventoryWSClient.addPartListing(partList.subList(0, MAX_LISTING_PER_REQUEST));
+						response = inventoryWSClient.addPartListing(partList.subList(0, MAX_LISTING_PER_REQUEST));
 						partList.subList(0, MAX_LISTING_PER_REQUEST).clear();
 					}else{
-						inventoryWSClient.addPartListing(partList.subList(0, partList.size()));
+						response = inventoryWSClient.addPartListing(partList.subList(0, partList.size()));
 						partList.subList(0, partList.size()).clear();
 					}
+					if (response == null){
+						success = false;
+					}
+				}
+				if (success){
+					lastCheck = LocalDateTime.now();
+					syncRepository.updateLastInventoryCheck();
 				}
 			}
 		}
-
-		LocalDateTime currentTime = LocalDateTime.now();
-		lastCheck = currentTime;
-		syncRepository.updateLastInventoryCheck();
 	}
 	
 	public LocalDateTime getLastCheck() {

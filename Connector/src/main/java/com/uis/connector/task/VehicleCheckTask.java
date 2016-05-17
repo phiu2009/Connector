@@ -14,6 +14,7 @@ import com.uis.connector.entity.Stock;
 import com.uis.connector.repository.StockRepository;
 import com.uis.connector.repository.SyncRepository;
 import com.uis.connector.ws.client.StockWSClient;
+import com.uis.connector.ws.pojo.WSResponse;
 
 @Component
 public class VehicleCheckTask {
@@ -43,12 +44,15 @@ public class VehicleCheckTask {
 			logger.info("The number of updated stocks since lastCheck: " + vehicleList.size());
 		}
 		
+		WSResponse response = null;
 		if (vehicleList != null && vehicleList.size() > 0){
-			stockWSClient.addStockListing(vehicleList);
+			response = stockWSClient.addStockListing(vehicleList);
 		}
 		
-		lastCheck = currentTime;
-		syncRepository.updateLastStockCheck();
+		if (response != null){
+			lastCheck = currentTime;
+			syncRepository.updateLastStockCheck();
+		}
 	}
 	
 	public LocalDateTime getLastCheck() {

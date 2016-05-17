@@ -1,6 +1,5 @@
 package com.uis.connector.task;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -8,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.uis.connector.ApplicationState;
 import com.uis.connector.entity.Inventory;
 import com.uis.connector.entity.Stock;
 import com.uis.connector.repository.InventoryRepository;

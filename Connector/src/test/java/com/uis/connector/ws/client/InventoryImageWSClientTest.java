@@ -36,19 +36,19 @@ public class InventoryImageWSClientTest {
 	@Autowired
 	private ApplicationState appState;
 	
-	@Test
-	public void testGetPartImage(){
-		LocalDateTime lastUpdated = LocalDateTime.of(2016, 4, 8, 11, 20, 0);
-		WSResponseGet reponse = imageWSClient.getPartImage(lastUpdated.format(DateUtil.formatter));
-		Assert.assertNotNull(reponse);
-		
-		List<PartListingImagePojo> imageList = reponse.getGetPartImages().getSuccess();
-		for (PartListingImagePojo img : imageList){
-			StringBuffer imgUrl = new StringBuffer(img.getImage());
-			imgUrl.replace(0, 13, appState.getServerURL());
-			ImageUtil.getImageFromURL(imgUrl.toString());
-		}
-	}
+//	@Test
+//	public void testGetPartImage(){
+//		LocalDateTime lastUpdated = LocalDateTime.of(2016, 4, 8, 11, 20, 0);
+//		WSResponseGet reponse = imageWSClient.getPartImage(lastUpdated.format(DateUtil.formatter));
+//		Assert.assertNotNull(reponse);
+//		
+//		List<PartListingImagePojo> imageList = reponse.getGetPartImages().getSuccess();
+//		for (PartListingImagePojo img : imageList){
+//			StringBuffer imgUrl = new StringBuffer(img.getImage());
+//			imgUrl.replace(0, 13, appState.getServerURL());
+//			ImageUtil.getImageFromURL(imgUrl.toString());
+//		}
+//	}
 	
 	@Test
 	public void testAddPartImage(){

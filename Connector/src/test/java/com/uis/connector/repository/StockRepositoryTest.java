@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.uis.connector.ConnectorApplication;
 import com.uis.connector.entity.Stock;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ConnectorApplication.class)
 public class StockRepositoryTest {
@@ -21,11 +22,9 @@ public class StockRepositoryTest {
 	private StockRepository stockRepository;
 	
 	@Test
-	public void testFindByCreatedDateTimeGreaterThan(){
+	public void testFindByModfiedDateTime(){
 		LocalDateTime lastUpdate = LocalDateTime.of(2016, 3, 22, 12, 30, 0);
 		List<Stock> list = stockRepository.findByModifiedDateTimeGreaterThan(lastUpdate);
-		
 		Assert.assertNotNull(list);
 	}
 }
-

@@ -1,7 +1,5 @@
 package com.uis.connector.ws.pojo;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import com.uis.connector.entity.Part;
 
 public class PartPojo {
@@ -13,15 +11,15 @@ public class PartPojo {
 	private int nswPrescribed;
 	private int saPrescribed;
 	
-	
 	public PartPojo(Part part) {
 		this.partId = part.getSerial();
-		this.description = StringEscapeUtils.escapeSql(part.getDescription());
-		this.abbreviation = StringEscapeUtils.escapeSql(part.getAbbreviation());
+		this.description = part.getDescription();
+		this.abbreviation = part.getAbbreviation();
+		this.categoryId = part.getCategory();
 		this.nswPrescribed = part.getNswPrescribed();
 		this.saPrescribed = part.getSaPrescribed();
-		this.categoryId = part.getCategory();
 	}
+	
 	
 	public long getPartId() {
 		return partId;

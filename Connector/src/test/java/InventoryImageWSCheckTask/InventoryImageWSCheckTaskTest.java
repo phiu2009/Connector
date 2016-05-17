@@ -16,9 +16,4 @@ public class InventoryImageWSCheckTaskTest {
 	@Autowired
 	private InventoryImageWSCheckTask task;
 	
-	@Test
-	public void testCheckImageUpdate(){
-		task.checkForPartImageUpdateInWebServer();
-		
-	}
 }

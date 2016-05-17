@@ -14,7 +14,7 @@ import com.uis.connector.entity.InventoryImages;
 
 @Repository
 public interface InventoryImageRepository extends CrudRepository<InventoryImages, Long>{
-
+	
 	List<InventoryImages> findByInventorySerialOrderByImageNo(long inventorySerial);
 	
 	List<InventoryImages> findByInventorySerialAndImageNo(long inventorySerial, int imageNo);
@@ -25,21 +25,21 @@ public interface InventoryImageRepository extends CrudRepository<InventoryImages
 	
 	@Modifying
 	@Transactional
-	@Query("update InventoryImages invImg set wsSync = 1 where inventorySerial = :ids and imageNo = :imgNo")
-	int updateWSSyncStatusByInvSerial(@Param("ids") Long serials, @Param("imgNo") Integer imgNo);
+	@Query("update InventoryImages set wsSync=1 where inventorySerial = :id and imageNo = :imgNo")
+	int updateWSSyncStatusByInvSerial(@Param("id") Long serial, @Param("imgNo") Integer imgNo);
 	
 	@Modifying
 	@Transactional
-	@Query("update InventoryImages invImg set wsSync = 1 where stockSerial = :ids and imageNo = :imgNo")
-	int updateWSSyncStatusByStockSerial(@Param("ids") Long serials, @Param("imgNo") Integer imgNo);
+	@Query("update InventoryImages set wsSync=1 where stockSerial = :id and imageNo = :imgNo")
+	int updateWSSyncStatusByStockSerial(@Param("id") Long serial, @Param("imgNo") Integer imgNo);
 	
 	@Modifying
 	@Transactional
-	@Query("delete InventoryImages invImg where inventorySerial = :ids and imageNo = :imgNo")
-	int deleteByInvSerialAndImgNo(@Param("ids") Long serials, @Param("imgNo") Integer imgNo);
+	@Query("delete InventoryImages where inventorySerial = :id and imageNo = :imgNo")
+	int deleteByInvSerialAndImgNo(@Param("id") Long serial, @Param("imgNo") Integer imgNo);
 	
 	@Modifying
 	@Transactional
-	@Query("delete InventoryImages invImg where stockSerial = :ids and imageNo = :imgNo")
-	int deleteByStockSerialAndImgNo(@Param("ids") Long serials, @Param("imgNo") Integer imgNo);
+	@Query("delete InventoryImages where stockSerial = :id and imageNo = :imgNo")
+	int deleteByStockSerialAndImgNo(@Param("id") Long serial, @Param("imgNo") Integer imgNo);
 }

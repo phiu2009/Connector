@@ -12,7 +12,6 @@ import com.uis.connector.ApplicationState;
 import com.uis.connector.entity.InventoryImages;
 import com.uis.connector.repository.InventoryImageRepository;
 import com.uis.connector.repository.StockRepository;
-import com.uis.connector.util.DateUtil;
 import com.uis.connector.util.ImageUtil;
 import com.uis.connector.ws.client.ImageWSClient;
 import com.uis.connector.ws.pojo.StockListingImagePojo;
@@ -32,15 +31,6 @@ public class StockImageWSCheckTask {
 	private ApplicationState appState;
 	private static final Log logger = LogFactory.getLog(StockImageWSCheckTask.class);
 
-//	@Scheduled(fixedRate=20000)
-	public void checkForStockImageUpdateInWebServer(){
-		WSResponseGet respondObj = inventoryImageWSClient.getStockImage(getLastCheck().format(DateUtil.formatter));
-		processRepsonse(respondObj);
-		
-		LocalDateTime currentTime = LocalDateTime.now();
-		lastCheck = currentTime;
-	}
-	
 	public void checkForStockImageUpdateInWebServer(String stockListingId, String imageId){
 		WSResponseGet respondObj = inventoryImageWSClient.getStockImageByStockListingId(stockListingId, imageId);
 		processRepsonse(respondObj);
@@ -67,8 +57,6 @@ public class StockImageWSCheckTask {
 					img.setStockSerial(stockImage.getStockListingId());
 					img.setWsSync(1);
 					inventoryImageRepository.save(img);
-					
-					logger.info("Updated image "+ stockImage.getImageId() + " from server for stockListing: " + stockImage.getStockListingId());
 				}
 				
 				// Save snapshot image into inventory
@@ -82,6 +70,7 @@ public class StockImageWSCheckTask {
 				}else if (stockImage.getImageId() == 4){
 					stockRepository.updateImage4(stockImage.getStockListingId(), snapshotImage);
 				}
+				logger.info("Updated image "+ stockImage.getImageId() + " from server for stockListing: " + stockImage.getStockListingId());
 			}
 		}
 	}

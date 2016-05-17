@@ -16,7 +16,8 @@ import com.uis.connector.entity.Inventory;
 @Repository
 public interface InventoryRepository extends CrudRepository<Inventory, Long>{
 
-	List<Inventory> findByModifiedDateTimeGreaterThan(LocalDateTime lastUpdate);
+	@Query("Select inv from Inventory inv where inv.status > -1 and inv.modifiedDateTime > :lastUpdate")
+	List<Inventory> findByModifiedDateTimeGreaterThan(@Param("lastUpdate") LocalDateTime lastUpdate);
 	
 	@Query("Select inv from Inventory inv where inv.sold = 0 and inv.writeOff = 0 and inv.status > -1 and inv.deleted = 0")
 	List<Inventory> findAllActiveInventory();

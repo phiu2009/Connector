@@ -37,11 +37,11 @@ public class InventoryImageWSCheckTask {
 
 //	@Scheduled(fixedRate=20000)
 	public void checkForPartImageUpdateInWebServer(){
-		WSResponseGet respondObj = inventoryImageWSClient.getPartImage(getLastCheck().format(DateUtil.formatter));
-		processRepsonse(respondObj);
-		
-		LocalDateTime currentTime = LocalDateTime.now();
-		lastCheck = currentTime;
+//		WSResponseGet respondObj = inventoryImageWSClient.getPartImage(getLastCheck().format(DateUtil.formatter));
+//		processRepsonse(respondObj);
+//		
+//		LocalDateTime currentTime = LocalDateTime.now();
+//		lastCheck = currentTime;
 	}
 	
 	public void checkForPartImageUpdateInWebServer(String stockListingId, String partListingId, String imageId){
