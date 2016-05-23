@@ -37,6 +37,7 @@ public class ForcedResyncTask {
 			logger.info("The number of stock listings to resync: " + vehicleList.size());
 			stockWSClient.setForcedResync(true);
 			stockWSClient.addStockListing(vehicleList);
+			stockWSClient.setForcedResync(false);
 		}
 		logger.info("Resync stock listings completed");
 		
