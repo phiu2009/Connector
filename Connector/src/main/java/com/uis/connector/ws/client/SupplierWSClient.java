@@ -57,12 +57,7 @@ public class SupplierWSClient extends AbstractWSClient{
 						&& responseObj.getGetSuppliers().getSuccess().size() > 0){
 					request.getUpdates().addData(supplierPojo);
 				}else{
-					request.getAdds().addData(supplierPojo);
-					
-					if (responseObj.getGetSuppliers().getSuccess().get(0).getForceResync() != null &&
-							responseObj.getGetSuppliers().getSuccess().get(0).getForceResync() == 1){
-						
-					}
+					request.getAdds().addData(supplierPojo);					
 				}
 			}
 		}
