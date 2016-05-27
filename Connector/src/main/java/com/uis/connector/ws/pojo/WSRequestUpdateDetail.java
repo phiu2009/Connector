@@ -15,7 +15,6 @@ public class WSRequestUpdateDetail{
 	private ArrayList<ModelPojo> updateModels = new ArrayList<ModelPojo>();
 	private ArrayList<SeriesPojo> updateSeries = new ArrayList<SeriesPojo>();
 	private ArrayList<TrimPojo> updateTrims = new ArrayList<TrimPojo>();
-	private ArrayList<BodyPojo> updateBody = new ArrayList<BodyPojo>();
 	private ArrayList<EnginePojo> updateEngines = new ArrayList<EnginePojo>();
 	private ArrayList<GearboxPojo> updateGearboxes = new ArrayList<GearboxPojo>();
 	private ArrayList<PartPojo> updateParts = new ArrayList<PartPojo>();
@@ -37,7 +36,6 @@ public class WSRequestUpdateDetail{
 			case "ModelPojo": {getUpdateModels().add((ModelPojo)data); break;}
 			case "SeriesPojo": {getUpdateSeries().add((SeriesPojo)data); break;}
 			case "TrimPojo": {getUpdateTrims().add((TrimPojo)data); break;}
-			case "BodyPojo": {getUpdateBody().add((BodyPojo)data); break;}
 			case "EnginePojo": {getUpdateEngines().add((EnginePojo)data); break;}
 			case "GearboxPojo": {getUpdateGearboxes().add((GearboxPojo)data); break;}
 			case "PartPojo": {getUpdateParts().add((PartPojo)data); break;}
@@ -104,16 +102,6 @@ public class WSRequestUpdateDetail{
 
 	public void setUpdateTrims(ArrayList<TrimPojo> updateTrims) {
 		this.updateTrims = updateTrims;
-	}
-
-
-	public ArrayList<BodyPojo> getUpdateBody() {
-		return updateBody;
-	}
-
-
-	public void setUpdateBody(ArrayList<BodyPojo> updateBody) {
-		this.updateBody = updateBody;
 	}
 
 

@@ -15,7 +15,6 @@ public class WSRequestAddDetail{
 	private ArrayList<ModelPojo> addModels = null;
 	private ArrayList<SeriesPojo> addSeries = null;
 	private ArrayList<TrimPojo> addTrims = null;
-	private ArrayList<BodyPojo> addBody = null;
 	private ArrayList<EnginePojo> addEngines = null;
 	private ArrayList<GearboxPojo> addGearboxes = null;
 	private ArrayList<PartPojo> addParts = null;
@@ -38,7 +37,6 @@ public class WSRequestAddDetail{
 			case "ModelPojo": {getAddModels().add((ModelPojo)data); break;}
 			case "SeriesPojo": {getAddSeries().add((SeriesPojo)data); break;}
 			case "TrimPojo": {getAddTrims().add((TrimPojo)data); break;}
-			case "BodyPojo": {getAddBody().add((BodyPojo)data); break;}
 			case "EnginePojo": {getAddEngines().add((EnginePojo)data); break;}
 			case "GearboxPojo": {getAddGearboxes().add((GearboxPojo)data); break;}
 			case "PartPojo": {getAddParts().add((PartPojo)data); break;}
@@ -107,13 +105,6 @@ public class WSRequestAddDetail{
 			addTrims = new ArrayList<TrimPojo>();
 		}
 		return addTrims;
-	}
-	
-	public ArrayList<BodyPojo> getAddBody() {
-		if (addBody == null){
-			addBody = new ArrayList<BodyPojo>();
-		}
-		return addBody;
 	}
 	
 	public ArrayList<EnginePojo> getAddEngines() {
