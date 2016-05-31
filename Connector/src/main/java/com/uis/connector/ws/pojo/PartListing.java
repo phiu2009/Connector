@@ -27,7 +27,7 @@ public class PartListing {
   	private Long stockListingId ;
   	private String tagNo;
   	private int writeOff;
-  	
+  	private String partStatus;
   	private String modifiedDateTime;
   	
   	private Integer wheresoldDelete;
@@ -68,6 +68,13 @@ public class PartListing {
   		
   		this.tagNo = inv.getTagNo();
   		
+  		if (inv.getStatus() != null){
+  			switch (inv.getStatus()){
+  			case 0 : this.partStatus = "On Vehicle"; break;
+  			case 1 : this.partStatus = "In Stock"; break;
+  			default : break;
+  		}
+  		}
   		if (inv.getModifiedDateTime() != null){
   			this.modifiedDateTime = inv.getModifiedDateTime().format(DateUtil.formatter);
   		}else{
@@ -202,6 +209,14 @@ public class PartListing {
 
 	public void setPartCondition(String partCondition) {
 		this.partCondition = partCondition;
+	}
+
+	public String getPartStatus() {
+		return partStatus;
+	}
+
+	public void setPartStatus(String partStatus) {
+		this.partStatus = partStatus;
 	}
 
   	

@@ -110,6 +110,10 @@ public class ConnectorSSEClient {
 						currentVersion = syncState.getVersion().doubleValue();
 					}
 					autoUpdater.checkForUpdate(currentVersion);
+				}else if ("updatePartLocation".equals(msgObj.get("eventType"))){
+					String newLocation = msgObj.getString("location");
+					long partListingId = msgObj.getLong("partListingId");
+					inventoryRepository.updateInvLocation(partListingId, newLocation);
 				}
 			}
 		}catch(JSONException je){

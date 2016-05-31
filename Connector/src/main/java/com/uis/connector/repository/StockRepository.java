@@ -16,10 +16,10 @@ import com.uis.connector.entity.Stock;
 @Repository
 public interface StockRepository extends CrudRepository<Stock, Long>{
 	
-	@Query("Select st from Stock st where st.buyInStock = 0 and st.modifiedDateTime > ?")
+	@Query("Select st from Stock st where st.modifiedDateTime > ?")
 	List<Stock> findByModifiedDateTimeGreaterThan(LocalDateTime lastUpdate);
 	
-	@Query("Select st from Stock st where st.deleted = 0 and st.writeOff = 0 and buyInStock = 0")
+	@Query("Select st from Stock st where st.deleted = 0 and st.writeOff = 0")
 	List<Stock> findAllActiveStock();
 	
 	@Modifying

@@ -56,4 +56,9 @@ public interface InventoryRepository extends CrudRepository<Inventory, Long>{
 	@Transactional
 	@Query("update Inventory inv set image4 = :data where serial = :ids")
 	int updateInvImage4(@Param("ids") Long serials, @Param("data") String imageData);
+	
+	@Modifying
+	@Transactional
+	@Query("update Inventory inv set location = (select serial from Locations where location = :location) where serial = :id")
+	int updateInvLocation(@Param("id") Long serials, @Param("location") String location);
 }
