@@ -22,15 +22,15 @@ public class PartListingSupp {
 		this.location = inv.getLocationDetail();
 
 		if (inv.getModifiedDateTime() == null){
-			editDate = "0000-00-00 00:00:00";
+//			editDate = "0000-00-00 00:00:00";
 		}else{
 			editDate = inv.getModifiedDateTime().format(formatter);
 		}
 		
-		dateSold = "0000-00-00 00:00:00";
+//		dateSold = "0000-00-00 00:00:00";
 		
 		if (inv.getCreatedDateTime() == null){
-			inventoryDate = "0000-00-00 00:00:00";
+//			inventoryDate = "0000-00-00 00:00:00";
 		}else{
 			inventoryDate = inv.getCreatedDateTime().format(formatter);
 		}

@@ -9,7 +9,7 @@ public class StockListingSupp {
 	private long stockListingId;
 	private long supplierId;
 	private String bodyColor;
-	private int odometer;
+	private Integer odometer;
 	private String vehicleLocation;
 	private String inventoryDate;
 	private String editDate;
@@ -23,12 +23,17 @@ public class StockListingSupp {
 		this.vehicleLocation = stock.getLocationDetail();
 
 		if (stock.getModifiedDateTime() == null){
-			editDate = "0000-00-00 00:00:00";
+//			editDate = "0000-00-00 00:00:00";
 		}else{
 			editDate = stock.getModifiedDateTime().format(formatter);
 		}
+		bodyColor = stock.getBodyColour();
+		odometer = stock.getOdometer();
 		
-		inventoryDate = "0000-00-00 00:00:00";
+//		inventoryDate = "0000-00-00 00:00:00";
+		if (stock.getCreatedDateTime() != null){
+			inventoryDate = stock.getCreatedDateTime().format(formatter);
+		}
 		this.publishRight = 1;
 	}
 	
@@ -44,10 +49,10 @@ public class StockListingSupp {
 	public void setBodyColor(String bodyColor) {
 		this.bodyColor = bodyColor;
 	}
-	public int getOdometer() {
+	public Integer getOdometer() {
 		return odometer;
 	}
-	public void setOdometer(int odometer) {
+	public void setOdometer(Integer odometer) {
 		this.odometer = odometer;
 	}
 	public String getVehicleLocation() {
