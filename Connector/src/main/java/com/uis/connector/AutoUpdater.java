@@ -97,9 +97,10 @@ public class AutoUpdater implements ExitCodeGenerator {
 		builder.redirectErrorStream(true); // redirect error stream to output stream
 		builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 		try {
-			builder.start();
+			builder.start().waitFor();
+			
 			System.exit(0);
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e.getMessage());
