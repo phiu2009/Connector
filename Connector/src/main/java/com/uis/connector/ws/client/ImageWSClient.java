@@ -70,10 +70,14 @@ public class ImageWSClient extends AbstractWSClient {
 	}
 	
 	public void updateStockImages(long stockId){
+		Set<Integer> existingImageNo = new HashSet<Integer>();
 		for (int i=1; i<=4; i++){
 			List<InventoryImages> imageList = inventoryImagesRepository.findByStockSerialAndImageNo(stockId, i);
-			processImages(imageList, 0, stockId, i, false);
+			if (processImages(imageList, 0, stockId, i, false)){
+				existingImageNo.add(i);
+			}
 		}
+		deleteImages(existingImageNo, 0, stockId);
 	}
 	
 	private boolean processImages(List<InventoryImages> imageList, long partListingId, long stockListingId, int imgNo, boolean add){
@@ -94,20 +98,20 @@ public class ImageWSClient extends AbstractWSClient {
 				PartListingImagePojo partImage = new PartListingImagePojo(appState.getPLSupplierId(), imgNo, 
 						partListingId, stockListing, imageData.toString());
 				if (wsSync == 0 || forcedResync){
-					request.getAdds().addData(partImage);
+					request.add().addData(partImage);
 					logger.info("Add image " + imgNo + " for partListing serial: " + partListingId);
 				}else{
-					request.getUpdates().addData(partImage);
+					request.update().addData(partImage);
 					logger.info("Update image " + imgNo + " for partListing serial: " + partListingId);
 				}
 			}else if (stockListingId > 0){ // build stockListing image
 				StockListingImagePojo stockImage = new StockListingImagePojo(appState.getPLSupplierId(), imgNo, 
 						stockListingId, imageData.toString());
 				if (wsSync == 0 || forcedResync){
-					request.getAdds().addData(stockImage);
+					request.add().addData(stockImage);
 					logger.info("Add image " + imgNo + " for stockListing serial: " + stockListingId);
 				}else{
-					request.getUpdates().addData(stockImage);
+					request.update().addData(stockImage);
 					logger.info("Update image " + imgNo + " for stockListing serial: " + stockListingId);
 				}
 			}
