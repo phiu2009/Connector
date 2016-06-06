@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.uis.connector.ApplicationState;
 import com.uis.connector.entity.Inventory;
 import com.uis.connector.entity.Stock;
-import com.uis.connector.repository.LocationRepository;
 import com.uis.connector.ws.pojo.PartListing;
 import com.uis.connector.ws.pojo.PartListingComment;
 import com.uis.connector.ws.pojo.PartListingSupp;
@@ -63,21 +62,21 @@ public class WSRequestBuilder {
 									 part.setSupplierId(appState.getPLSupplierId());
 									 part.setWheresoldDelete(0);
 									 PartListingSupp partSupp = new PartListingSupp(inv, appState.getPLSupplierId());
-									 request.getUpdates().addData(part);
-									 request.getUpdates().addData(partSupp);
+									 request.update().addData(part);
+									 request.update().addData(partSupp);
 									 if (inv.getComment() != null && !"".equals(inv.getComment())){
 										 PartListingComment partComment = new PartListingComment(appState.getPLSupplierId(), inv.getSerial(), inv.getComment());
-										 request.getUpdates().addData(partComment);
+										 request.update().addData(partComment);
 									 }
 									});
 		newParts.forEach(inv -> {PartListing part = new PartListing(inv);
 								 part.setSupplierId(appState.getPLSupplierId());
 								 PartListingSupp partSupp = new PartListingSupp(inv, appState.getPLSupplierId());
-		 						 request.getAdds().addData(part);
-		 						 request.getAdds().addData(partSupp);
+		 						 request.add().addData(part);
+		 						 request.add().addData(partSupp);
 		 						 if (inv.getComment() != null && !"".equals(inv.getComment())){
 		 							 PartListingComment partComment = new PartListingComment(appState.getPLSupplierId(), inv.getSerial(), inv.getComment());
-		 							 request.getAdds().addData(partComment);
+		 							 request.add().addData(partComment);
 		 						 }
 		});
 	}
@@ -93,21 +92,21 @@ public class WSRequestBuilder {
 									 stock.setWheredeleteSold(0);
 									 stock.setSupplierId(appState.getPLSupplierId());
 									 StockListingSupp stockSupp = new StockListingSupp(st, appState.getPLSupplierId());
-									 request.getUpdates().addData(stock);
-									 request.getUpdates().addData(stockSupp);
+									 request.update().addData(stock);
+									 request.update().addData(stockSupp);
 									 if (st.getNotes() != null && !"".equals(st.getNotes())){
 										 StockListingComment stockComment = new StockListingComment(appState.getPLSupplierId(), st.getSerial(), st.getNotes());
-										 request.getUpdates().addData(stockComment);
+										 request.update().addData(stockComment);
 									 }
 									});
 		newStocks.forEach(st -> { StockListing stock = new StockListing(st);
 		 						 stock.setSupplierId(appState.getPLSupplierId());
 								 StockListingSupp stockSupp = new StockListingSupp(st, appState.getPLSupplierId());
-		 						 request.getAdds().addData(stock);
-		 						 request.getAdds().addData(stockSupp);
+		 						 request.add().addData(stock);
+		 						 request.add().addData(stockSupp);
 		 						 if (st.getNotes() != null && !"".equals(st.getNotes())){
 									 StockListingComment stockComment = new StockListingComment(appState.getPLSupplierId(), st.getSerial(), st.getNotes());
-									 request.getAdds().addData(stockComment);
+									 request.add().addData(stockComment);
 								 }
 		});
 		
@@ -120,11 +119,11 @@ public class WSRequestBuilder {
 		partList.forEach(inv -> {PartListing part = new PartListing(inv);
 								 part.setSupplierId(appState.getPLSupplierId());
 								 PartListingSupp partSupp = new PartListingSupp(inv, appState.getPLSupplierId());
-		 						 request.getAdds().addData(part);
-		 						 request.getAdds().addData(partSupp);
+		 						 request.add().addData(part);
+		 						 request.add().addData(partSupp);
 		 						 if (inv.getComment() != null && !"".equals(inv.getComment())){
 		 							 PartListingComment partComment = new PartListingComment(appState.getPLSupplierId(), inv.getSerial(), inv.getComment());
-		 							 request.getAdds().addData(partComment);
+		 							 request.add().addData(partComment);
 		 						 }
 		});
 	}
@@ -136,11 +135,11 @@ public class WSRequestBuilder {
 		stockList.forEach(st -> { StockListing stock = new StockListing(st);
 		 						 stock.setSupplierId(appState.getPLSupplierId());
 								 StockListingSupp stockSupp = new StockListingSupp(st, appState.getPLSupplierId());
-		 						 request.getAdds().addData(stock);
-		 						 request.getAdds().addData(stockSupp);
+		 						 request.add().addData(stock);
+		 						 request.add().addData(stockSupp);
 		 						 if (st.getNotes() != null && !"".equals(st.getNotes())){
 									 StockListingComment stockComment = new StockListingComment(appState.getPLSupplierId(), st.getSerial(), st.getNotes());
-									 request.getAdds().addData(stockComment);
+									 request.add().addData(stockComment);
 								 }
 		});
 		

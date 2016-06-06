@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -23,6 +24,7 @@ import com.uis.connector.ws.pojo.WSResponseGet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ConnectorApplication.class)
+@IntegrationTest
 public class InventoryWSClientTest {
 
 	@Autowired
@@ -45,6 +47,38 @@ public class InventoryWSClientTest {
 		List<Inventory> partListings = new ArrayList<Inventory>();
 		partListings.add(inventoryRepository.findOne(new Long(900)));
 		partListings.forEach(part -> part.setSold(1));
+		
+		WSRequest request = reqBuilder.initWSRequest();
+		request.setPushEvent("true");
+        reqBuilder.buildWSRequest(partListings);
+        
+        inventoryWSClient.sendWSRequest(request);
+        
+        try {
+			Thread.sleep(300000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testChangePartStatus(){
+		List<Inventory> partListings = new ArrayList<Inventory>();
+		partListings.add(inventoryRepository.findOne(new Long(11)));
+		
+		WSRequest request = reqBuilder.initWSRequest();
+        reqBuilder.buildWSRequest(partListings);
+        
+        inventoryWSClient.sendWSRequest(request);
+	}
+	
+	@Test
+	public void testChangePartLocation(){
+		List<Inventory> partListings = new ArrayList<Inventory>();
+		Inventory inv = inventoryRepository.findOne(new Long(11));
+		inv.setLocation(2);
+		partListings.add(inv);
 		
 		WSRequest request = reqBuilder.initWSRequest();
 		request.setPushEvent("true");

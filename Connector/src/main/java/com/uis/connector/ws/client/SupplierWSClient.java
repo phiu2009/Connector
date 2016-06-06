@@ -32,7 +32,7 @@ public class SupplierWSClient extends AbstractWSClient{
 	@Autowired
 	private DatabaseVersionRepository databaseVersionRepository;
 	
-	public void addSupplierInfo(Settings setting, BigDecimal connectorVersion){
+	public void addSupplierInfo(Settings setting){
 		WSRequestGetSupplier requestGetSupplier = new WSRequestGetSupplier();
 		SupplierCriteria supllierCriteria = new SupplierCriteria();
 		supllierCriteria.setSupplierId(String.valueOf(appState.getPLSupplierId()));
@@ -51,13 +51,13 @@ public class SupplierWSClient extends AbstractWSClient{
 			if (datashare != null && databaseVersion != null){
 				supplierPojo.copyFrom(datashare);
 				supplierPojo.setUisVersion(databaseVersion.getVersion());
-				supplierPojo.setConnectorVersion(connectorVersion);
+				supplierPojo.setConnectorVersion(new BigDecimal(appState.getCurrentVersion()));
 				
 				if (responseObj.getGetSuppliers() != null && responseObj.getGetSuppliers().getSuccess() != null 
 						&& responseObj.getGetSuppliers().getSuccess().size() > 0){
-					request.getUpdates().addData(supplierPojo);
+					request.update().addData(supplierPojo);
 				}else{
-					request.getAdds().addData(supplierPojo);					
+					request.add().addData(supplierPojo);					
 				}
 			}
 		}

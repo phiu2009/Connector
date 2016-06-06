@@ -27,7 +27,7 @@ public class SupplierWSClientTest {
 	@Test
 	public void testGetSupplier(){
 		Settings settings = settingRepository.findOne(1);
-		supplierWSClient.addSupplierInfo(settings, new BigDecimal(1.1));
+		supplierWSClient.addSupplierInfo(settings);
 		
 		try {
 			Thread.sleep(300000);

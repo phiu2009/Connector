@@ -8,6 +8,20 @@ public class WSRequest {
 	
 	private String pushEvent;
 	
+	public WSRequestAddDetail add(){
+		if (adds == null){
+			adds = new WSRequestAddDetail();
+		}
+		return adds;
+	}
+	
+	public WSRequestUpdateDetail update(){
+		if (updates == null){
+			updates = new WSRequestUpdateDetail();
+		}
+		return updates;
+	}
+	
 	public String getSupplierId() {
 		return supplierId;
 	}
@@ -17,9 +31,9 @@ public class WSRequest {
 	}
 
 	public WSRequestAddDetail getAdds() {
-		if (adds == null){
-			adds = new WSRequestAddDetail();
-		}
+//		if (adds == null){
+//			adds = new WSRequestAddDetail();
+//		}
 		return adds;
 	}
 
@@ -28,9 +42,9 @@ public class WSRequest {
 	}
 
 	public WSRequestUpdateDetail getUpdates() {
-		if (updates == null){
-			updates = new WSRequestUpdateDetail();
-		}
+//		if (updates == null){
+//			updates = new WSRequestUpdateDetail();
+//		}
 		return updates;
 	}
 

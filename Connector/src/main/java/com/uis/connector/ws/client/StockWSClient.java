@@ -57,7 +57,7 @@ public class StockWSClient extends AbstractWSClient{
         });
         
         if (responseObj != null && stockListingSerials.size() > 0){
-        	logger.info("Update parts wsSync status: " + stockListingSerials.toString());
+        	logger.info("Update stock wsSync status: " + stockListingSerials.toString());
         	stockRepository.updateWSSyncStatus(stockListingSerials);
         }
         

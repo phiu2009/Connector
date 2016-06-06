@@ -15,10 +15,13 @@ import com.uis.connector.ConnectorApplication;
 import com.uis.connector.entity.Stock;
 import com.uis.connector.repository.StockRepository;
 import com.uis.connector.util.WSRequestBuilder;
+import com.uis.connector.ws.pojo.StockListing;
 import com.uis.connector.ws.pojo.StockListingCriteria;
 import com.uis.connector.ws.pojo.WSRequestGet;
 import com.uis.connector.ws.pojo.WSRequestGetStockListing;
 import com.uis.connector.ws.pojo.WSResponseGet;
+
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ConnectorApplication.class)
@@ -37,6 +40,12 @@ public class StockWSClientTest {
 		LocalDateTime lastUpdated = LocalDateTime.of(2016, 4, 21, 11, 30, 0);
 		List<Stock> stockListings =  stockRepository.findByModifiedDateTimeGreaterThan(lastUpdated);
 		stockWSClient.addStockListing(stockListings);
+	}
+	
+	@Test
+	public void testAddStock1(){
+		Stock stock =  stockRepository.findOne(new Long(133));
+		stockWSClient.addStockListing(Lists.newArrayList(stock));
 	}
 	
 	@Test

@@ -63,7 +63,7 @@ public class InventoryImageWSClientTest {
 		request.setPushEvent("true");
 		PartListingImagePojo partImage = new PartListingImagePojo(105628, 2, 900, 28, imageData.toString());
 //		request.getAdds().addData(partImage);
-		request.getUpdates().addData(partImage);
+		request.update().addData(partImage);
 		WSResponse response = imageWSClient.sendWSRequest(request);
 		Assert.assertNotNull(response);
 		
@@ -88,7 +88,7 @@ public class InventoryImageWSClientTest {
 		request.setPushEvent("true");
 		StockListingImagePojo stockImage = new StockListingImagePojo(105628, 4, 138, imageData.toString());
 //		request.getAdds().addData(partImage);
-		request.getUpdates().addData(stockImage);
+		request.update().addData(stockImage);
 		imageWSClient.sendWSRequest(request);
 		
 		
