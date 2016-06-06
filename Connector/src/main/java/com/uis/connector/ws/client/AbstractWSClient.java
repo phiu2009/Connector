@@ -33,6 +33,7 @@ public class AbstractWSClient {
 //	private final String URL = "http://52.62.244.157:8080/UISws/rest/api";
 	private String URL;
 	private MappingJackson2HttpMessageConverter mappingJackson;
+	private ObjectMapper mapper;
 	
 	@Autowired
 	private ApplicationState appState;
@@ -45,16 +46,17 @@ public class AbstractWSClient {
 		for (HttpMessageConverter msgConverter : rt.getMessageConverters()){
 			if (msgConverter instanceof MappingJackson2HttpMessageConverter){
 				mappingJackson = (MappingJackson2HttpMessageConverter)msgConverter;
-				mappingJackson.getObjectMapper().setSerializationInclusion(Include.NON_NULL);
+				mappingJackson.getObjectMapper().setSerializationInclusion(Include.NON_EMPTY);
 //				SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 //				mappingJackson.getObjectMapper().setDateFormat(dateFormat);
 			}
 		}
+		mapper = mappingJackson.getObjectMapper();
 	}
 	
 	protected WSResponse sendWSRequest(WSRequest request) {
 		try{
-			 ObjectMapper mapper = mappingJackson.getObjectMapper();
+			 mapper = mappingJackson.getObjectMapper();
 	         String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request);
 	         logger.info(jsonInString);
 	         
@@ -82,7 +84,7 @@ public class AbstractWSClient {
 	
 	protected WSResponseGet sendWSGetRequest(WSRequestGet getRequest){
 		try{
-			 ObjectMapper mapper = mappingJackson.getObjectMapper();
+			 mapper = mappingJackson.getObjectMapper();
 	         String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(getRequest);
 //	         String jsonInString = mapper.writeValueAsString(getRequest);
 	         logger.info(jsonInString);
@@ -114,7 +116,7 @@ public class AbstractWSClient {
 	
 	protected WSResponse sendWSRequest(WSRequestDelete request) {
 		try{
-			 ObjectMapper mapper = mappingJackson.getObjectMapper();
+			 mapper = mappingJackson.getObjectMapper();
 	         String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request);
 	         logger.info(jsonInString);
 	         
