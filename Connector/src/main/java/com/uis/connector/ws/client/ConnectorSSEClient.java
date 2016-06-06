@@ -15,13 +15,12 @@ import org.glassfish.jersey.media.sse.SseFeature;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.uis.connector.ApplicationState;
 import com.uis.connector.AutoUpdater;
-import com.uis.connector.entity.ConnectorSync;
 import com.uis.connector.repository.InventoryRepository;
-import com.uis.connector.repository.SyncRepository;
 import com.uis.connector.task.ForcedResyncTask;
 import com.uis.connector.task.InventoryImageWSCheckTask;
 import com.uis.connector.task.StockImageWSCheckTask;
@@ -45,8 +44,6 @@ public class ConnectorSSEClient {
 	private ForcedResyncTask forcedResyncTask;
 	@Autowired
 	private AutoUpdater autoUpdater;
-	@Autowired
-	private SyncRepository syncRepository;
 	
 	@PostConstruct
 	public void init(){
@@ -70,7 +67,19 @@ public class ConnectorSSEClient {
 		catch(Exception ex){
 			logger.info("Web Server Send Event Connection Failed");
 		}
-		logger.info("Web Server Send Event Connected");
+		if (eventSource.isOpen()){
+			logger.info("Web Server Send Event Connected");
+		}else{
+			logger.info("Web Server Send Event Connection Failed");
+		}
+	}
+	
+//	@Scheduled(fixedRate=60000)
+	@Scheduled(cron="0 0 6 * * MON-SAT")
+	public void checkSSEConnetion(){
+		if (!eventSource.isOpen()){
+			init();
+		}
 	}
 	
 	private void processMessage(String msg){
@@ -104,12 +113,7 @@ public class ConnectorSSEClient {
 				}else if ("forceResync".equals(msgObj.get("eventType"))){
 					forcedResyncTask.resync();
 				}else if ("forceUpdate".equals(msgObj.get("eventType"))){
-					double currentVersion = 0.0;
-					ConnectorSync syncState = syncRepository.findOne(new Integer(1));
-					if (syncState.getVersion() != null){
-						currentVersion = syncState.getVersion().doubleValue();
-					}
-					autoUpdater.checkForUpdate(currentVersion);
+					autoUpdater.checkForUpdate();
 				}else if ("updatePartLocation".equals(msgObj.get("eventType"))){
 					String newLocation = msgObj.getString("location");
 					long partListingId = msgObj.getLong("partListingId");
