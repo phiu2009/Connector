@@ -113,7 +113,7 @@ public class MasterDataWSClient extends AbstractWSClient{
 			T entity = list.get(i);
 			try {
 				Object data = pojoClazz.getConstructor(entity.getClass()).newInstance(entity);
-				request.getAdds().addData(data);
+				request.add().addData(data);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -163,7 +163,7 @@ public class MasterDataWSClient extends AbstractWSClient{
 		list.forEach(entity -> {
 			try {
 				Object data = pojoClazz.getConstructor(entity.getClass()).newInstance(entity);
-				request.getUpdates().addData(data);
+				request.update().addData(data);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
