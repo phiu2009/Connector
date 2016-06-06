@@ -35,7 +35,7 @@ public class AutoUpdater implements ExitCodeGenerator {
 	@Autowired
 	private SyncRepository syncRepository;
 	
-	public void checkForUpdate(double currentVersion){
+	public void checkForUpdate(){
 		URL url;
 		try {
 			 url = new URL(appState.getServerURL() + "/jar/" + APPLICATION_VERSION_FILE);
@@ -53,6 +53,7 @@ public class AutoUpdater implements ExitCodeGenerator {
 			 JSONObject versionObj = new JSONObject(versionStr);
 			 if (versionObj.opt("connectorVersion") != null){
 				 double version = versionObj.getDouble("connectorVersion");
+				 double currentVersion = appState.getCurrentVersion();
 				 logger.info("Current Version:" + currentVersion + " New Version:" + version);
 				 if (version - currentVersion > 0.0){
 					 syncRepository.updateVersion(new BigDecimal(version));
@@ -97,10 +98,10 @@ public class AutoUpdater implements ExitCodeGenerator {
 		builder.redirectErrorStream(true); // redirect error stream to output stream
 		builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 		try {
-			builder.start().waitFor();
+			builder.start();
 			
 			System.exit(0);
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e.getMessage());

@@ -26,6 +26,7 @@ public class ApplicationState {
 
 	private ConnectorSync syncState;
 	private Settings setting;
+	private double currentVersion = -1;
 	private final int DEFAULT_INTEVAL = 20000;
 	private static final Log logger = LogFactory.getLog(ApplicationState.class);
 	
@@ -38,7 +39,7 @@ public class ApplicationState {
 	@Value(value= "${connector.plSupplierId}")
 	private String plSupplierId;
 	
-	private Map<Long, String> locationMap = new HashMap<Long, String>();
+	private Map<Integer, String> locationMap = new HashMap<Integer, String>();
 	
 	@Autowired
 	private SyncRepository syncRepository;
@@ -62,14 +63,14 @@ public class ApplicationState {
 		}
 		
 		// check for update
-		double currentVersion = 0.0;
+//		double currentVersion = 0.0;
 		if (syncState.getVersion() != null){
 			currentVersion = syncState.getVersion().doubleValue();
 		}
-		autoUpdater.checkForUpdate(currentVersion);
+		autoUpdater.checkForUpdate();
 		
 		// Send suppliers info
-		supplierWSClient.addSupplierInfo(setting, syncState.getVersion());
+		supplierWSClient.addSupplierInfo(setting);
 		
 		// Init locations 
 		Iterable<Locations> locationIterator = locationRepository.findAll();
@@ -88,7 +89,7 @@ public class ApplicationState {
 	public long getPLSupplierId(){
 		Long supplierId = Long.parseLong(plSupplierId);
 		if (supplierId != null && supplierId.longValue() > 0){
-			return supplierId;
+			return supplierId.longValue();
 		}
 		if (setting != null && setting.getPlSupplierId() > 0){
 			return setting.getPlSupplierId();
@@ -136,8 +137,12 @@ public class ApplicationState {
 		return serverURL+":"+serverPort;
 	}
 	
-	public Map<Long, String> getLocationMap() {
+	public Map<Integer, String> getLocationMap() {
 		return locationMap;
+	}
+	
+	public double getCurrentVersion() {
+		return currentVersion;
 	}
 }
 
