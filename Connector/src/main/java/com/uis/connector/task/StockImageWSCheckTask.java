@@ -48,7 +48,7 @@ public class StockImageWSCheckTask {
 				imgUrl.replace(0, 13, appState.getServerURL());
 				
 				// Delete old image and update with the updated one from server
-				inventoryImageRepository.deleteByInvSerialAndImgNo(stockImage.getStockListingId(), stockImage.getImageId());
+				inventoryImageRepository.deleteByStockSerialAndImgNo(stockImage.getStockListingId(), stockImage.getImageId());
 				List<String> encodedData = ImageUtil.encodeImage(imgUrl.toString());
 				for (String imgData : encodedData){
 					InventoryImages img = new InventoryImages();
