@@ -9,15 +9,15 @@ import javax.persistence.Id;
 public class Locations {
 
 	@Id
-	private long serial;
+	private int serial;
 	
 	private String location;
 	private String locationDetail;
 	private int deleted;
-	public long getSerial() {
+	public int getSerial() {
 		return serial;
 	}
-	public void setSerial(long serial) {
+	public void setSerial(int serial) {
 		this.serial = serial;
 	}
 	public String getLocation() {

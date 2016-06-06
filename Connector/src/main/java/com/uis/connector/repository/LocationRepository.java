@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.uis.connector.entity.Locations;
 
 @Repository
-public interface LocationRepository extends CrudRepository<Locations, Long>{
+public interface LocationRepository extends CrudRepository<Locations, Integer>{
 
 	@Query("select l.locationDetail from Locations l where serial = ?")
-	String findLocationDetail(long id);
+	String findLocationDetail(int id);
 }
