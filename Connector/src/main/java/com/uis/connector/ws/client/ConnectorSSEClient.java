@@ -1,5 +1,7 @@
 package com.uis.connector.ws.client;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ws.rs.client.Client;
@@ -50,7 +52,8 @@ public class ConnectorSSEClient {
 		Client client = ClientBuilder.newBuilder().register(SseFeature.class).build();
 		String URI = appState.getWebServerAddress() + "/UISws/rest/events/" + appState.getPLSupplierId();
 		WebTarget target = client.target(URI);
-		eventSource = EventSource.target(target).build();
+		eventSource = EventSource.target(target).reconnectingEvery(5, TimeUnit.MINUTES).build();
+//		eventSource = EventSource.target(target).build();
 		EventListener listener = new EventListener() {
 			@Override
 			public void onEvent(InboundEvent inboundEvent) {
@@ -86,20 +89,24 @@ public class ConnectorSSEClient {
 		try {
 			JSONObject msgObj = new JSONObject(msg);
 			if (msgObj.getLong("supplierId") == appState.getPLSupplierId()){
-				if ("partSold".equals(msgObj.get("eventType"))){
-					long partListingId = msgObj.getLong("partListingId");
+				// Get common message data
+				long partListingId = 0;
+				long stockListingId = 0;
+				if (msgObj.opt("partListingId") != null){
+					partListingId = msgObj.getLong("partListingId");
+				}
+				if (msgObj.opt("stockListingId") != null){
+					stockListingId = msgObj.getLong("stockListingId");
+				}
+				// Process each event
+				if ("testConnection".equals(msgObj.get("eventType"))){
+					return;
+				} else if ("partSold".equals(msgObj.get("eventType"))){
+//					long partListingId = msgObj.getLong("partListingId");
 					inventoryRepository.updateSoldStatus(partListingId);
 					logger.info("Part Sold status udpated: " + partListingId);
 				}else if("imageUpdated".equals(msgObj.get("eventType")) || "imageAdded".equals(msgObj.get("eventType"))){
-					long partListingId = 0;
-					long stockListingId = 0;
 					int imageId = 0;
-					if (msgObj.opt("partListingId") != null){
-						partListingId = msgObj.getLong("partListingId");
-					}
-					if (msgObj.opt("stockListingId") != null){
-						stockListingId = msgObj.getLong("stockListingId");
-					}
 					if (msgObj.opt("imageId") != null){
 						imageId = msgObj.getInt("imageId");
 					}
@@ -116,8 +123,10 @@ public class ConnectorSSEClient {
 					autoUpdater.checkForUpdate();
 				}else if ("updatePartLocation".equals(msgObj.get("eventType"))){
 					String newLocation = msgObj.getString("location");
-					long partListingId = msgObj.getLong("partListingId");
 					inventoryRepository.updateInvLocation(partListingId, newLocation);
+				}else if ("partSentToEbay".equals(msgObj.get("eventType"))){
+//					inventoryRepository.updateSentToEbay(partListingId);
+					logger.info("Part sent to ebay: " + partListingId);
 				}
 			}
 		}catch(JSONException je){
