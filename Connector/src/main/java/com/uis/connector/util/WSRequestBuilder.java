@@ -60,7 +60,7 @@ public class WSRequestBuilder {
 		
 		updatedParts.forEach(inv -> {PartListing part = new PartListing(inv);
 									 part.setSupplierId(appState.getPLSupplierId());
-									 part.setWheresoldDelete(0);
+//									 part.setWheresoldDelete(0);
 									 PartListingSupp partSupp = new PartListingSupp(inv, appState.getPLSupplierId());
 									 request.update().addData(part);
 									 request.update().addData(partSupp);
@@ -89,7 +89,7 @@ public class WSRequestBuilder {
 		List<Stock> newStocks = stockList.stream().filter(part -> !part.isSynced()).collect(Collectors.toList());
 		
 		updatedStocks.forEach(st -> { StockListing stock = new StockListing(st);
-									 stock.setWheredeleteSold(0);
+//									 stock.setWheredeleteSold(0);
 									 stock.setSupplierId(appState.getPLSupplierId());
 									 StockListingSupp stockSupp = new StockListingSupp(st, appState.getPLSupplierId());
 									 request.update().addData(stock);

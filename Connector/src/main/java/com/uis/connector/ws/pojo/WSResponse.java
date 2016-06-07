@@ -1,5 +1,9 @@
 package com.uis.connector.ws.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(value=Include.NON_EMPTY)
 public class WSResponse {
 
 	private String supplierId;

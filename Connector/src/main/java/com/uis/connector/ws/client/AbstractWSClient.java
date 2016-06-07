@@ -46,7 +46,7 @@ public class AbstractWSClient {
 		for (HttpMessageConverter msgConverter : rt.getMessageConverters()){
 			if (msgConverter instanceof MappingJackson2HttpMessageConverter){
 				mappingJackson = (MappingJackson2HttpMessageConverter)msgConverter;
-				mappingJackson.getObjectMapper().setSerializationInclusion(Include.NON_EMPTY);
+				mappingJackson.getObjectMapper().setSerializationInclusion(Include.NON_NULL);
 //				SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 //				mappingJackson.getObjectMapper().setDateFormat(dateFormat);
 			}

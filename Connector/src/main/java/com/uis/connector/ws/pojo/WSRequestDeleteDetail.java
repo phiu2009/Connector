@@ -2,6 +2,10 @@ package com.uis.connector.ws.pojo;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(value=Include.NON_EMPTY)
 public class WSRequestDeleteDetail {
 
 	private ArrayList<PartImageCriteria> deletePartImages;
