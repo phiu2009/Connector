@@ -30,7 +30,7 @@ public class PartListing {
   	private String partStatus;
   	private String modifiedDateTime;
   	
-  	private Integer wheresoldDelete;
+//  	private Integer wheresoldDelete;
   	
   	public PartListing(){
   	}
@@ -195,13 +195,13 @@ public class PartListing {
 		this.writeOff = writeOff;
 	}
 
-	public Integer getWheresoldDelete() {
-		return wheresoldDelete;
-	}
-
-	public void setWheresoldDelete(Integer wheresoldDelete) {
-		this.wheresoldDelete = wheresoldDelete;
-	}
+//	public Integer getWheresoldDelete() {
+//		return wheresoldDelete;
+//	}
+//
+//	public void setWheresoldDelete(Integer wheresoldDelete) {
+//		this.wheresoldDelete = wheresoldDelete;
+//	}
 
 	public String getPartCondition() {
 		return partCondition;

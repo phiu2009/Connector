@@ -29,7 +29,7 @@ public class StockListing {
 	
 	private String status;
 	
-	private Integer wheredeleteSold;
+//	private Integer wheredeleteSold;
 	
 	public StockListing() {
 		// TODO Auto-generated constructor stub
@@ -219,13 +219,13 @@ public class StockListing {
 		this.status = status;
 	}
 
-	public Integer getWheredeleteSold() {
-		return wheredeleteSold;
-	}
-
-	public void setWheredeleteSold(Integer wheredeleteSold) {
-		this.wheredeleteSold = wheredeleteSold;
-	}
+//	public Integer getWheredeleteSold() {
+//		return wheredeleteSold;
+//	}
+//
+//	public void setWheredeleteSold(Integer wheredeleteSold) {
+//		this.wheredeleteSold = wheredeleteSold;
+//	}
 
 	public void setStockNo(String stockNo) {
 		this.stockNo = stockNo;
