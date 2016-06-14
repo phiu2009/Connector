@@ -26,7 +26,7 @@ public class Inventory {
 	private Integer status;
 	private String condition;
 	private Integer state;
-	private long location;
+	private Integer location;
 	private String tagNo;
 	
 	private BigDecimal retailPrice;
@@ -47,6 +47,7 @@ public class Inventory {
 	private LocalDateTime modifiedDateTime;
 	
 	private Integer wsSync;
+//	private Integer onEbay;
 	
 	@Transient
 	private String locationDetail;
@@ -133,10 +134,10 @@ public class Inventory {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-	public long getLocation() {
+	public Integer getLocation() {
 		return location;
 	}
-	public void setLocation(long location) {
+	public void setLocation(Integer location) {
 		this.location = location;
 	}
 	public Integer getWsSync() {
@@ -241,6 +242,14 @@ public class Inventory {
 	public void setState(Integer state) {
 		this.state = state;
 	}
+
+//	public Integer getOnEbay() {
+//		return onEbay;
+//	}
+//
+//	public void setOnEbay(Integer onEbay) {
+//		this.onEbay = onEbay;
+//	}
 
 	
 }
