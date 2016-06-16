@@ -62,10 +62,6 @@ public class VehicleCheckTask {
 		return lastCheck;
 	}
 	
-	private int getTimeInteval(){
-		return appState.getTimeInteval();
-	}
-	
 	@Autowired
 	public void setAppState(ApplicationState appState) {
 		this.appState = appState;
