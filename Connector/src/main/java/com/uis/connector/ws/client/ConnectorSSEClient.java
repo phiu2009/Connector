@@ -125,7 +125,7 @@ public class ConnectorSSEClient {
 					String newLocation = msgObj.getString("location");
 					inventoryRepository.updateInvLocation(partListingId, newLocation);
 				}else if ("partSentToEbay".equals(msgObj.get("eventType"))){
-					inventoryRepository.updateSentToEbay(partListingId);
+//					inventoryRepository.updateSentToEbay(partListingId);
 					logger.info("Part sent to ebay: " + partListingId);
 				}
 			}
