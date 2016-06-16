@@ -52,7 +52,7 @@ public class ConnectorSSEClient {
 		Client client = ClientBuilder.newBuilder().register(SseFeature.class).build();
 		String URI = appState.getWebServerAddress() + "/UISws/rest/events/" + appState.getPLSupplierId();
 		WebTarget target = client.target(URI);
-		eventSource = EventSource.target(target).reconnectingEvery(5, TimeUnit.MINUTES).build();
+		eventSource = EventSource.target(target).reconnectingEvery(3, TimeUnit.MINUTES).build();
 //		eventSource = EventSource.target(target).build();
 		EventListener listener = new EventListener() {
 			@Override
@@ -77,9 +77,9 @@ public class ConnectorSSEClient {
 		}
 	}
 	
-//	@Scheduled(fixedRate=60000)
-	@Scheduled(cron="0 0 6 * * MON-SAT")
+	@Scheduled(fixedRate=1800000)
 	public void checkSSEConnetion(){
+		logger.info("Web Server Send Event Check Connection");
 		if (!eventSource.isOpen()){
 			init();
 		}
@@ -125,7 +125,7 @@ public class ConnectorSSEClient {
 					String newLocation = msgObj.getString("location");
 					inventoryRepository.updateInvLocation(partListingId, newLocation);
 				}else if ("partSentToEbay".equals(msgObj.get("eventType"))){
-//					inventoryRepository.updateSentToEbay(partListingId);
+					inventoryRepository.updateSentToEbay(partListingId);
 					logger.info("Part sent to ebay: " + partListingId);
 				}
 			}
