@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.uis.connector.repository.SyncRepository;
@@ -35,9 +36,11 @@ public class AutoUpdater implements ExitCodeGenerator {
 	@Autowired
 	private SyncRepository syncRepository;
 	
+	@Scheduled(cron="0 0 6 * * *")
 	public void checkForUpdate(){
 		URL url;
 		try {
+			 logger.info("Check for update");
 			 url = new URL(appState.getServerURL() + "/jar/" + APPLICATION_VERSION_FILE);
 			 InputStream in = new BufferedInputStream(url.openStream());
 			 ByteArrayOutputStream out = new ByteArrayOutputStream();
