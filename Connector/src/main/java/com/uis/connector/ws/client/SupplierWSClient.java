@@ -33,7 +33,7 @@ public class SupplierWSClient extends AbstractWSClient{
 	@Autowired
 	private DatabaseVersionRepository databaseVersionRepository;
 	
-	@Scheduled(cron="0 10 6 * * *")
+	@Scheduled(fixedRate=3600000)
 	public void addSupplierInfo(Settings setting){
 		WSResponseGet responseObj = getSupplier();
 		
