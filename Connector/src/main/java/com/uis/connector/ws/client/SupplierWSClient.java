@@ -3,6 +3,7 @@ package com.uis.connector.ws.client;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.uis.connector.ApplicationState;
@@ -32,6 +33,7 @@ public class SupplierWSClient extends AbstractWSClient{
 	@Autowired
 	private DatabaseVersionRepository databaseVersionRepository;
 	
+	@Scheduled(cron="0 10 6 * * *")
 	public void addSupplierInfo(Settings setting){
 		WSResponseGet responseObj = getSupplier();
 		
