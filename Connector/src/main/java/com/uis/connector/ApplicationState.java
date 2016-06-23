@@ -70,7 +70,7 @@ public class ApplicationState {
 		autoUpdater.checkForUpdate();
 		
 		// Send suppliers info
-		supplierWSClient.addSupplierInfo(setting);
+		supplierWSClient.addSupplierInfo();
 		
 		// Init locations 
 		Iterable<Locations> locationIterator = locationRepository.findAll();

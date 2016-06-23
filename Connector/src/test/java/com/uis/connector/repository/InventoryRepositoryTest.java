@@ -2,12 +2,12 @@ package com.uis.connector.repository;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
 
 import com.uis.connector.ConnectorApplication;
 import com.uis.connector.entity.Inventory;
@@ -22,12 +22,15 @@ public class InventoryRepositoryTest {
 	@Test
 	public void testFindAllInventory(){
 		List<Inventory> list = inventoryRepository.findAllActiveInventory();
-		Assert.notNull(list);
-		Assert.isTrue(list.size() > 0);
+		Assert.assertNotNull(list);
+		Assert.assertTrue(list.size() > 0);
 	}
 	
 	@Test
-	public void testUpdateWSSyncStatus(){
-		
+	public void testUpdateSentToEbay(){
+		inventoryRepository.updateSentToEbay(920l);
+		Inventory inv = inventoryRepository.findOne(920l);
+		Assert.assertNotNull(inv);
+		Assert.assertEquals(1, inv.getOnEbay().intValue());
 	}
 }

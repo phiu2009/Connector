@@ -12,6 +12,7 @@ import com.uis.connector.entity.DatabaseVersion;
 import com.uis.connector.entity.Settings;
 import com.uis.connector.repository.DataShareSettingRepository;
 import com.uis.connector.repository.DatabaseVersionRepository;
+import com.uis.connector.repository.SettingRepository;
 import com.uis.connector.util.WSRequestBuilder;
 import com.uis.connector.ws.pojo.SupplierCriteria;
 import com.uis.connector.ws.pojo.SupplierPojo;
@@ -32,18 +33,24 @@ public class SupplierWSClient extends AbstractWSClient{
 	private DataShareSettingRepository dataShareSettingRepository;
 	@Autowired
 	private DatabaseVersionRepository databaseVersionRepository;
+	@Autowired
+	private SettingRepository settingRepository;
 	
 	@Scheduled(fixedRate=3600000)
-	public void addSupplierInfo(Settings setting){
+//	public void addSupplierInfo(Settings setting){
+	public void addSupplierInfo(){
 		WSResponseGet responseObj = getSupplier();
 		
 		WSRequest request = null;
 		if (responseObj != null){
 			// Send DataShareSetting to server
 			request = reqBuilder.initWSRequest();
-			SupplierPojo supplierPojo = new SupplierPojo(setting);
+			
+			Settings setting = settingRepository.findOne(new Integer(1));
 			DataShareSetting datashare = dataShareSettingRepository.findOne(1);
 			DatabaseVersion databaseVersion = databaseVersionRepository.findOne(1);
+			
+			SupplierPojo supplierPojo = new SupplierPojo(setting);			
 			if (datashare != null && databaseVersion != null){
 				supplierPojo.copyFrom(datashare);
 				supplierPojo.setUisVersion(databaseVersion.getVersion());
