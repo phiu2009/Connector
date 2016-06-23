@@ -47,7 +47,7 @@ public class Inventory {
 	private LocalDateTime modifiedDateTime;
 	
 	private Integer wsSync;
-//	private Integer onEbay;
+	private Integer onEbay;
 	
 	@Transient
 	private String locationDetail;
@@ -243,13 +243,13 @@ public class Inventory {
 		this.state = state;
 	}
 
-//	public Integer getOnEbay() {
-//		return onEbay;
-//	}
-//
-//	public void setOnEbay(Integer onEbay) {
-//		this.onEbay = onEbay;
-//	}
+	public Integer getOnEbay() {
+		return onEbay;
+	}
+
+	public void setOnEbay(Integer onEbay) {
+		this.onEbay = onEbay;
+	}
 
 	
 }

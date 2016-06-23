@@ -26,6 +26,8 @@ import com.uis.connector.repository.InventoryRepository;
 import com.uis.connector.task.ForcedResyncTask;
 import com.uis.connector.task.InventoryImageWSCheckTask;
 import com.uis.connector.task.StockImageWSCheckTask;
+import com.uis.connector.ws.pojo.WSRequestGet;
+import com.uis.connector.ws.pojo.WSResponseGet;
 
 
 @Component
@@ -46,6 +48,8 @@ public class ConnectorSSEClient {
 	private ForcedResyncTask forcedResyncTask;
 	@Autowired
 	private AutoUpdater autoUpdater;
+	@Autowired
+	private SupplierWSClient supplierWSClient;
 	
 	@PostConstruct
 	public void init(){
@@ -100,7 +104,7 @@ public class ConnectorSSEClient {
 				}
 				// Process each event
 				if ("testConnection".equals(msgObj.get("eventType"))){
-					return;
+					supplierWSClient.getSupplier();
 				} else if ("partSold".equals(msgObj.get("eventType"))){
 //					long partListingId = msgObj.getLong("partListingId");
 					inventoryRepository.updateSoldStatus(partListingId);

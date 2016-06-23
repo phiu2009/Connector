@@ -33,13 +33,7 @@ public class SupplierWSClient extends AbstractWSClient{
 	private DatabaseVersionRepository databaseVersionRepository;
 	
 	public void addSupplierInfo(Settings setting){
-		WSRequestGetSupplier requestGetSupplier = new WSRequestGetSupplier();
-		SupplierCriteria supllierCriteria = new SupplierCriteria();
-		supllierCriteria.setSupplierId(String.valueOf(appState.getPLSupplierId()));
-		requestGetSupplier.getGetSuppliers().add(supllierCriteria);
-		
-		WSRequestGet getSupplierRequest = reqBuilder.initWSRequestGet(requestGetSupplier);
-		WSResponseGet responseObj = sendWSGetRequest(getSupplierRequest);
+		WSResponseGet responseObj = getSupplier();
 		
 		WSRequest request = null;
 		if (responseObj != null){
@@ -63,5 +57,16 @@ public class SupplierWSClient extends AbstractWSClient{
 		}
 				
 		sendWSRequest(request);
+	}
+
+	public WSResponseGet getSupplier() {
+		WSRequestGetSupplier requestGetSupplier = new WSRequestGetSupplier();
+		SupplierCriteria supllierCriteria = new SupplierCriteria();
+		supllierCriteria.setSupplierId(String.valueOf(appState.getPLSupplierId()));
+		requestGetSupplier.getGetSuppliers().add(supllierCriteria);
+		
+		WSRequestGet getSupplierRequest = reqBuilder.initWSRequestGet(requestGetSupplier);
+		WSResponseGet responseObj = sendWSGetRequest(getSupplierRequest);
+		return responseObj;
 	}
 }
