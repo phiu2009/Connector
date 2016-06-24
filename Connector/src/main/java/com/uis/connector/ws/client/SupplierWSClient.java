@@ -18,6 +18,7 @@ import com.uis.connector.ws.pojo.SupplierCriteria;
 import com.uis.connector.ws.pojo.SupplierPojo;
 import com.uis.connector.ws.pojo.WSRequest;
 import com.uis.connector.ws.pojo.WSRequestGet;
+import com.uis.connector.ws.pojo.WSRequestGetPushEvent;
 import com.uis.connector.ws.pojo.WSRequestGetSupplier;
 import com.uis.connector.ws.pojo.WSResponseGet;
 
@@ -75,6 +76,17 @@ public class SupplierWSClient extends AbstractWSClient{
 		requestGetSupplier.getGetSuppliers().add(supllierCriteria);
 		
 		WSRequestGet getSupplierRequest = reqBuilder.initWSRequestGet(requestGetSupplier);
+		WSResponseGet responseObj = sendWSGetRequest(getSupplierRequest);
+		return responseObj;
+	}
+	
+	public WSResponseGet getPushEvent() {
+		WSRequestGetPushEvent requestGetPushEvent = new WSRequestGetPushEvent();
+		SupplierCriteria supllierCriteria = new SupplierCriteria();
+		supllierCriteria.setSupplierId(String.valueOf(appState.getPLSupplierId()));
+		requestGetPushEvent.getGetPushEvent().add(supllierCriteria);
+		
+		WSRequestGet getSupplierRequest = reqBuilder.initWSRequestGet(requestGetPushEvent);
 		WSResponseGet responseObj = sendWSGetRequest(getSupplierRequest);
 		return responseObj;
 	}

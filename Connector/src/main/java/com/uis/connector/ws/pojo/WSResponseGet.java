@@ -13,6 +13,7 @@ public class WSResponseGet {
 	private WSResponseGetDetail<VehiclePojo> getVehicles;
 	private WSResponseGetDetail<PartListingImagePojo> getPartImages;
 	private WSResponseGetDetail<StockListingImagePojo> getStockListingImages;
+	private WSResponseGetDetail<PushEventPojo> getPushEvent;
 	
 	public String getSupplierId() {
 		return supplierId;
@@ -55,6 +56,12 @@ public class WSResponseGet {
 	}
 	public void setGetStockListingImages(WSResponseGetDetail<StockListingImagePojo> getStockListingImages) {
 		this.getStockListingImages = getStockListingImages;
+	}
+	public WSResponseGetDetail<PushEventPojo> getGetPushEvent() {
+		return getPushEvent;
+	}
+	public void setGetPushEvent(WSResponseGetDetail<PushEventPojo> getPushEvent) {
+		this.getPushEvent = getPushEvent;
 	}
 	
 }

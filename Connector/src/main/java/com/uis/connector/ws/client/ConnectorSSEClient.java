@@ -26,6 +26,7 @@ import com.uis.connector.repository.InventoryRepository;
 import com.uis.connector.task.ForcedResyncTask;
 import com.uis.connector.task.InventoryImageWSCheckTask;
 import com.uis.connector.task.StockImageWSCheckTask;
+import com.uis.connector.ws.pojo.PushEventPojo;
 import com.uis.connector.ws.pojo.WSRequestGet;
 import com.uis.connector.ws.pojo.WSResponseGet;
 
@@ -56,8 +57,8 @@ public class ConnectorSSEClient {
 		Client client = ClientBuilder.newBuilder().register(SseFeature.class).build();
 		String URI = appState.getWebServerAddress() + "/UISws/rest/events/" + appState.getPLSupplierId();
 		WebTarget target = client.target(URI);
-		eventSource = EventSource.target(target).reconnectingEvery(3, TimeUnit.MINUTES).build();
-//		eventSource = EventSource.target(target).build();
+//		eventSource = EventSource.target(target).reconnectingEvery(3, TimeUnit.MINUTES).build();
+		eventSource = EventSource.target(target).build();
 		EventListener listener = new EventListener() {
 			@Override
 			public void onEvent(InboundEvent inboundEvent) {
@@ -67,7 +68,6 @@ public class ConnectorSSEClient {
 			}
 			};
 		eventSource.register(listener, "message-to-client");
-		
 		try{
 			eventSource.open();
 		}
@@ -81,11 +81,22 @@ public class ConnectorSSEClient {
 		}
 	}
 	
-	@Scheduled(fixedRate=1800000)
+	@Scheduled(fixedRate=600000)
+//	@Scheduled(fixedRate=180000)
 	public void checkSSEConnetion(){
-		logger.info("Web Server Send Event Check Connection");
 		if (!eventSource.isOpen()){
+			eventSource.close();
+			logger.info("Web Server Send Event Re-Init Connection");
 			init();
+		}else{
+			logger.info("Web Server Send Event Check For Unsent Message");
+			WSResponseGet response = supplierWSClient.getPushEvent();
+			if (response != null && response.getGetPushEvent() != null && response.getGetPushEvent().getSuccess() != null &&
+					response.getGetPushEvent().getSuccess().size() > 0){
+				for (PushEventPojo eventObj : response.getGetPushEvent().getSuccess()){
+					processMessage(eventObj.getEventMessage());
+				}
+			}
 		}
 	}
 	
@@ -104,7 +115,7 @@ public class ConnectorSSEClient {
 				}
 				// Process each event
 				if ("testConnection".equals(msgObj.get("eventType"))){
-					supplierWSClient.getSupplier();
+					//supplierWSClient.getSupplier();
 				} else if ("partSold".equals(msgObj.get("eventType"))){
 //					long partListingId = msgObj.getLong("partListingId");
 					inventoryRepository.updateSoldStatus(partListingId);
@@ -129,9 +140,11 @@ public class ConnectorSSEClient {
 					String newLocation = msgObj.getString("location");
 					inventoryRepository.updateInvLocation(partListingId, newLocation);
 				}else if ("partSentToEbay".equals(msgObj.get("eventType"))){
-//					inventoryRepository.updateSentToEbay(partListingId);
+					inventoryRepository.updateSentToEbay(partListingId);
 					logger.info("Part sent to ebay: " + partListingId);
 				}
+				// Acknowledge SSE Message received
+				supplierWSClient.sendSimplifyRequest(msgObj);
 			}
 		}catch(JSONException je){
 			je.printStackTrace();
