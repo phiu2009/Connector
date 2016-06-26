@@ -81,8 +81,14 @@ public class ConnectorSSEClient {
 		}
 	}
 	
+	public void reInit(){
+		logger.info("Web Server Send Event Re-Init Connection");
+		eventSource.close(1, TimeUnit.MINUTES);
+		init();
+	}
+	
 	@Scheduled(fixedRate=600000)
-//	@Scheduled(fixedRate=180000)
+//	@Scheduled(fixedRate=120000)
 	public void checkSSEConnetion(){
 		if (!eventSource.isOpen()){
 			eventSource.close();
@@ -113,11 +119,14 @@ public class ConnectorSSEClient {
 				if (msgObj.opt("stockListingId") != null){
 					stockListingId = msgObj.getLong("stockListingId");
 				}
+				boolean sseReInit = false;
 				// Process each event
 				if ("testConnection".equals(msgObj.get("eventType"))){
-					//supplierWSClient.getSupplier();
-				} else if ("partSold".equals(msgObj.get("eventType"))){
-//					long partListingId = msgObj.getLong("partListingId");
+					
+				} else if ("sseReInit".equals(msgObj.get("eventType"))){
+					sseReInit = true;
+				}
+				else if ("partSold".equals(msgObj.get("eventType"))){
 					inventoryRepository.updateSoldStatus(partListingId);
 					logger.info("Part Sold status udpated: " + partListingId);
 				}else if("imageUpdated".equals(msgObj.get("eventType")) || "imageAdded".equals(msgObj.get("eventType"))){
@@ -145,6 +154,10 @@ public class ConnectorSSEClient {
 				}
 				// Acknowledge SSE Message received
 				supplierWSClient.sendSimplifyRequest(msgObj);
+				// Re initialize SSE Connection
+				if (sseReInit){
+					reInit();
+				}
 			}
 		}catch(JSONException je){
 			je.printStackTrace();
