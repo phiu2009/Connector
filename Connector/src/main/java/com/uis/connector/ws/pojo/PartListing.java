@@ -30,6 +30,8 @@ public class PartListing {
   	private String partStatus;
   	private String modifiedDateTime;
   	
+  	private String interchangeNo;
+  	
 //  	private Integer wheresoldDelete;
   	
   	public PartListing(){
@@ -80,6 +82,7 @@ public class PartListing {
   		}else{
   			this.modifiedDateTime = "0000-00-00 00:00:00";
   		}
+  		this.interchangeNo = inv.getInterchangeNo();
   	}
   	
 	public Long getPartListingId() {

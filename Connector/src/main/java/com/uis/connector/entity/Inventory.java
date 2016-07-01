@@ -49,6 +49,8 @@ public class Inventory {
 	private Integer wsSync;
 	private Integer onEbay;
 	
+	private String interchangeNo;
+	
 	@Transient
 	private String locationDetail;
 	
@@ -249,6 +251,14 @@ public class Inventory {
 
 	public void setOnEbay(Integer onEbay) {
 		this.onEbay = onEbay;
+	}
+
+	public String getInterchangeNo() {
+		return interchangeNo;
+	}
+
+	public void setInterchangeNo(String interchangeNo) {
+		this.interchangeNo = interchangeNo;
 	}
 
 	
